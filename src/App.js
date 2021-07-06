@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import dotenv from 'dotenv';
+
   class App extends React.Component{
     constructor(props){
       super(props)
@@ -10,7 +10,9 @@ import dotenv from 'dotenv';
     DataSearch:'',
     CityDirectionsLat:'',
     CityDirectionsLon:'',
-    ShowTheMap:false
+    ShowTheMap:false,
+    DataForweather:[],
+
     }
       }
       LocationData =async(event)=>{
@@ -19,7 +21,6 @@ import dotenv from 'dotenv';
       
      await this.setState({DataSearch :event.target.Thecity.value})
      
-
       let MyUrl=`https://eu1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_KEY}&q=${this.state.DataSearch}&format=json`;
       let GetTheData=await axios.get(MyUrl);
       
@@ -34,6 +35,13 @@ import dotenv from 'dotenv';
       this.setState({CityDirectionsLon: GetTheData.data[0].lon
       })
     }
+
+// WeatherData=async()=>{
+//   await this.setState({DataSearch :event.target.Thecity.value})
+
+
+// }
+
     render(){
     
       return(
@@ -48,7 +56,7 @@ import dotenv from 'dotenv';
 </label>
 
     </form>
-   <p>City: {this.state.City},{this.state.CityDirectionsLat},{this.state.CityDirectionsLon}</p>
+   <p>City: {this.state.City},{this.state.CityDirectionsLat},{this.state.CityDirectionsLon},{}</p>
    {this.state.ShowTheMap && <img alt =''src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_KEY}&center=${this.state.CityDirectionsLat},${this.state.CityDirectionsLon}&zoom=10`}></img>
 }
         </> 
