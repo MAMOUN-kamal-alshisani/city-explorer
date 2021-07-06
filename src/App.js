@@ -1,6 +1,12 @@
 import React from 'react';
 import axios from 'axios';
 
+import Card from 'react-bootstrap/Card';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+
+
+// import Cards from 'card'
   class App extends React.Component{
     constructor(props){
       super(props)
@@ -10,19 +16,22 @@ import axios from 'axios';
     DataSearch:'',
     CityDirectionsLat:'',
     CityDirectionsLon:'',
+    daysDATA:'',
     ShowTheMap:false,
-    DataForweather:[],
+    DataForweather:false,
+    date:'',
+    Desc:'',
 
     }
-      }
-      LocationData =async(event)=>{
+  }
+     LocationData =async(event)=>{
       event.preventDefault();
       
       
      await this.setState({DataSearch :event.target.Thecity.value})
      
       let MyUrl=`https://eu1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_KEY}&q=${this.state.DataSearch}&format=json`;
-      let GetTheData=await axios.get(MyUrl);
+      let GetTheData = await axios.get(MyUrl);
       
       console.log(GetTheData);
       console.log(GetTheData.data[0].display_name);
@@ -34,31 +43,80 @@ import axios from 'axios';
       })
       this.setState({CityDirectionsLon: GetTheData.data[0].lon
       })
+
+      this.renderweather();
     }
+    
+   renderweather = async () =>{
+let CityInfo= this.state.DataSearch.charAt(0).toUpperCase() +this.state.DataSearch.slice(1);
 
-// WeatherData=async()=>{
-//   await this.setState({DataSearch :event.target.Thecity.value})
-
-
-// }
-
+    let TheWeatherUrl=`https://city-explorer-api12.herokuapp.com/GetweatherDATA?cityName=${CityInfo}&format=json`
+    let GetTHEWeather=await axios.get(TheWeatherUrl);
+     
+   console.log(GetTHEWeather);
+   console.log(GetTHEWeather.data.valid_date);
+    await this.setState({ date:GetTHEWeather.data[0].valid_date, Desc:GetTHEWeather.data[0].description ,DataForweather:true})
+  
+    await this.setState({ date1:GetTHEWeather.data[1].valid_date, Desc1:GetTHEWeather.data[1].description ,DataForweather:true})
+    await this.setState({ date2:GetTHEWeather.data[2].valid_date, Desc2:GetTHEWeather.data[2].description ,DataForweather:true})
+ 
+   }
+   
     render(){
     
       return(
         
        <>
-       <h1>city-explorer</h1>
-    {/* <button onClick={this.LocationData}>get the location info</button> */}
-    <form onSubmit={this.LocationData} >
+
+<form onSubmit={this.LocationData} >
       <label>CityName
 <input type='text' name='Thecity' ></input>
 <input type='submit' value='get city information'></input>
 </label>
 
     </form>
-   <p>City: {this.state.City},{this.state.CityDirectionsLat},{this.state.CityDirectionsLon},{}</p>
-   {this.state.ShowTheMap && <img alt =''src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_KEY}&center=${this.state.CityDirectionsLat},${this.state.CityDirectionsLon}&zoom=10`}></img>
-}
+
+
+       
+       <Card style={{ width: '18rem' }} onClick={this.changeState} className="cards">
+                    <Card.Img variant="top" src={this.props.image_url} />
+                    <Card.Body>
+                        <Card.Title> City:{this.state.City}</Card.Title>
+                        <Card.Text>
+                      lat :  {this.state.CityDirectionsLat}
+                        </Card.Text>
+                        <Card.Text>
+                       lon : {this.state.CityDirectionsLon}
+                        </Card.Text>
+                        {this.state.ShowTheMap &&
+                        <Card.Img variant="top" src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_KEY}&center=${this.state.CityDirectionsLat},${this.state.CityDirectionsLon}&zoom=10`}></Card.Img>
+                        }
+                       
+                        <Card.Text>
+                        valid_date: {this.state.date}
+                        </Card.Text>
+                        <Card.Text>
+                        Description:{this.state.Desc}
+                        </Card.Text>
+                        <Card.Text>
+                        valid_date:{this.state.date1}
+                        </Card.Text>
+                        <Card.Text>
+                        Description:{this.state.Desc1}
+                        </Card.Text>
+                        <Card.Text>
+                        valid_date:{this.state.date2}
+                         </Card.Text>
+                        <Card.Text>
+                        Description:{this.state.Desc2}
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
+
+    {/* <button onClick={this.LocationData}>get the location info</button> */}
+ 
+
+
         </> 
       )
     }
