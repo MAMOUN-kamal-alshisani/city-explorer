@@ -1,9 +1,10 @@
 import React from 'react';
 import axios from 'axios';
-import Card from 'react-bootstrap/Card';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import Movies from './component/Movies'
-import Table from 'react-bootstrap/Table'
+import Movies from './component/Movies'
+import Cards from './component/Cards'
+// import Table from 'react-bootstrap/Table'
 
 // import Cards from 'card'
   class App extends React.Component{
@@ -18,15 +19,17 @@ import Table from 'react-bootstrap/Table'
     daysDATA:'',
     date:'',
     Desc:'',
+    showmovie:false,
     ShowTheMap:false,
-    DataForweather:false,
-   weather:{},
-  TheMoviesData:{}
+    DataForCity:false,
+   
+  TheMoviesData:[],
 
     }
   }
      LocationData =async(event)=>{
       event.preventDefault();
+
      await this.setState({DataSearch :event.target.Thecity.value})
      
       let MyUrl=`https://eu1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_KEY}&q=${this.state.DataSearch}&format=json`;
@@ -34,45 +37,36 @@ import Table from 'react-bootstrap/Table'
       this.setState({City: GetTheData.data[0].display_name, CityDirectionsLat: GetTheData.data[0].lat ,CityDirectionsLon: GetTheData.data[0].lon,
         ShowTheMap:true
       })
-
-      // http://localhost:3001/GetMovieUrl?CityMovie=Amman
-
-      let TheMoviesUrl=`https://cityexplorerv3.herokuapp.com/GetMovieUrl?CityMovie=${this.state.DataSearch}&format=json`
-      let TheMoviesreq= await axios.get(TheMoviesUrl)
-      console.log(TheMoviesreq);
-      await this.setState({TheMoviesData:TheMoviesreq.data.original_title })
-
-
-      console.log(this.state.TheMoviesData)
-      this.renderweather();
-      //
-      // let TheMoviesUrl=`{https://cityexplorerv3.herokuapp.com/GetMovieUrl?CityMovie=${this.state.DataSearch}`
-    }
     
+      // http://localhost:3001/GetMovieUrl?CityMovie=Amman
+    
+    
+this.GetTheCity();
+this.GetMovies();
 
 
+  }
+  GetMovies = async () => {
+    let THEmovies = this.state.DataSearch.charAt(0).toUpperCase() + this.state.DataSearch.slice(1);
+  let TheMoviesUrl=`https://cityexplorerv3.herokuapp.com/GetMovieUrl?CityMovie=${THEmovies}&format=json`
+  let TheMoviesreq= await axios.get(TheMoviesUrl)
+  console.log(TheMoviesreq);
+  await this.setState({TheMoviesData:TheMoviesreq.data , showmovie:true  })
+    // console.log(this.state.TheMoviesData)
+  // let TheMoviesUrl=`{https://cityexplorerv3.herokuapp.com/GetMovieUrl?CityMovie=${this.state.DataSearch}`
+}
 
-   renderweather = async () =>{
+GetTheCity = async () =>{
 let CityInfo= this.state.DataSearch.charAt(0).toUpperCase() +this.state.DataSearch.slice(1);
 
-    let TheWeatherUrl=`https://city-explorer-api12.herokuapp.com/GetweatherDATA?cityName=${CityInfo}&format=json`
-    let GetTHEWeather=await axios.get(TheWeatherUrl);
-     
-   
-    await this.setState({ date:GetTHEWeather.data[0].valid_date, Desc:GetTHEWeather.data[0].description , date1:GetTHEWeather.data[1].valid_date, Desc1:GetTHEWeather.data[1].description ,
-      date2:GetTHEWeather.data[2].valid_date, Desc2:GetTHEWeather.data[2].description,DataForweather:true
-    })
-    
-   }
-  
-   
-    
-   
-  
+    let TheCityUrl=`https://city-explorer-api12.herokuapp.com/GetweatherDATA?cityName=${CityInfo}&format=json`
+    let GetTHECity=await axios.get(TheCityUrl);
+    await this.setState({ date:GetTHECity.data[0].valid_date, Desc:GetTHECity.data[0].description , date1:GetTHECity.data[1].valid_date, Desc1:GetTHECity.data[1].description ,
+     date2:GetTHECity.data[2].valid_date, Desc2:GetTHECity.data[2].description,DataForCity:true  })
 
-   
-   
-   
+   }
+
+  
    
     render(){
     
@@ -80,54 +74,6 @@ let CityInfo= this.state.DataSearch.charAt(0).toUpperCase() +this.state.DataSear
         
        <>
 
-<Table>
-<thead>
-<tr>
-    <td>
-title :
-    </td>
-</tr>
-<tr>
-    <td>
-overview :
-    </td>
-</tr>
-
-<tr>
-    <td>
-    average_vote :
-        
-    </td>
-</tr>
-<tr>
-    <td>
-total_votes :
-        
-    </td>
-</tr>
-<tr>
-    <td>
-    popularity
-        
-    </td>
-</tr>
-<tr>
-    <td>
-    poster_path
-        
-    </td>
-</tr>
-<tr>
-    <td>
-    release_date
-        
-    </td>
-</tr>
-</thead>
-</Table>
-
-{/* 
-<Movies/> */}
 
 <form onSubmit={this.LocationData} >
       <label>CityName
@@ -138,57 +84,69 @@ total_votes :
     </form>
 
 
-       
-       <Card style={{ width: '18rem' }} onClick={this.changeState} className="cards">
-                    <Card.Img variant="top" src={this.props.image_url} />
-                    <Card.Body>
-                        <Card.Title> City:{this.state.City}</Card.Title>
+ 
+    {this.state.date2.map(Ccards => {
+          return (
+            <Cards Ccards={Ccards} ShowTheMap={true}/>
+          )
+        })
+    }
+
+
+
+  
+  {this.state.TheMoviesData.map(movie => {
+          return (
+            <Movies movie={movie} ShowTheMap={true}/>
+          )
+        })
+    }
+        </> 
+      );
+    }}
+    export default App;
+
+  
+
+
+
+
+
+    
+{/*        
+    {this.props.ShowTheMap &&
+       <Card style={{ width: '800px' }} onClick={this.state.changeState} className="cards">
+         
+                 
+                    <Card.Body style={{backgroundColor:'Lavender'}}>
+                    <Card.Img variant="top" src={this.state.image_url} style={{ width: '100px' },{ margin_left: '10px' }}/>
+                        <Card.Title> City: {this.state.City}</Card.Title>
                         <Card.Text>
-                      lat :  {this.state.CityDirectionsLat}
+                        <h5>    latitude :  {this.state.CityDirectionsLat}</h5>
                         </Card.Text>
                         <Card.Text>
-                       lon : {this.state.CityDirectionsLon}
+                        <h5> longitude : {this.state.CityDirectionsLon}</h5>
                         </Card.Text>
-                        {this.state.ShowTheMap &&
+                        
                         <Card.Img variant="top" src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_KEY}&center=${this.state.CityDirectionsLat},${this.state.CityDirectionsLon}&zoom=10`}></Card.Img>
-                        }
-                       
                         <Card.Text>
-                        valid_date: {this.state.date}
+                      <h5>  valid_date: {this.state.date}</h5>
                         </Card.Text>
                         <Card.Text>
-                        Description:{this.state.Desc}
+                     <h5>  Description: {this.state.Desc}</h5> 
                         </Card.Text>
                         <Card.Text>
-                        valid_date:{this.state.date1}
+                        <h5>  valid_date: {this.state.date1}</h5>
                         </Card.Text>
                         <Card.Text>
-                        Description:{this.state.Desc1}
+                        <h5>   Description: {this.state.Desc1}</h5>
                         </Card.Text>
                         <Card.Text>
-                        valid_date:{this.state.date2}
+                        <h5>   valid_date: {this.state.date2}</h5>
                          </Card.Text>
                         <Card.Text>
-                        Description:{this.state.Desc2}
+                        <h5>  Description:{this.state.Desc2}</h5>
                         </Card.Text>
                     </Card.Body>
                 </Card>
-
-    {/* <button onClick={this.LocationData}>get the location info</button> */}
- 
-
-
-        </> 
-      )
-    }
-    
-    }
-    export default App;
-
-
-
-
-
-
-
-    
+    } */}
