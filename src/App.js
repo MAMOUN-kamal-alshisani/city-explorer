@@ -1,11 +1,9 @@
 import React from 'react';
 import axios from 'axios';
-
+import Card from 'react-bootstrap/Card';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Movies from './component/Movies'
-import Cards from './component/Cards'
-// import Table from 'react-bootstrap/Table'
-
+ 
 // import Cards from 'card'
   class App extends React.Component{
     constructor(props){
@@ -83,38 +81,7 @@ let CityInfo= this.state.DataSearch.charAt(0).toUpperCase() +this.state.DataSear
 
     </form>
 
-
- 
-    {this.state.date2.map(Ccards => {
-          return (
-            <Cards Ccards={Ccards} ShowTheMap={true}/>
-          )
-        })
-    }
-
-
-
-  
-  {this.state.TheMoviesData.map(movie => {
-          return (
-            <Movies movie={movie} ShowTheMap={true}/>
-          )
-        })
-    }
-        </> 
-      );
-    }}
-    export default App;
-
-  
-
-
-
-
-
-    
-{/*        
-    {this.props.ShowTheMap &&
+    {this.state.ShowTheMap &&
        <Card style={{ width: '800px' }} onClick={this.state.changeState} className="cards">
          
                  
@@ -149,4 +116,27 @@ let CityInfo= this.state.DataSearch.charAt(0).toUpperCase() +this.state.DataSear
                         </Card.Text>
                     </Card.Body>
                 </Card>
-    } */}
+
+
+    }
+  {this.state.TheMoviesData.map(movie => {
+          return (
+            <Movies movie={movie} ShowTheMap={true}/>
+          )
+        })
+    }
+        </> 
+      );
+    }}
+    export default App;
+
+  
+
+
+
+
+
+    
+      
+    
+    

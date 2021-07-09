@@ -1,63 +1,35 @@
-import React from 'react';
-import Card from 'react-bootstrap/Card';
+// import React from 'react';
+// import { Card, Button } from 'react-bootstrap/'
+// import 'bootstrap/dist/css/bootstrap.min.css';
 
+// class Cards extends React.Component {
 
+//     render() {
+//         return (
+//             <div className = "cardcontainer">
+//                 {this.props.showInformation &&
+//                     <Card style={{ width: '28rem', backgroundColor: '#b0ceff', boxShadow: '2px 2px 2px black' }} >
 
- class Cards extends React.Component{
-constructor(props){
+//                         <Card.Body>
+//                             <Card.Title>City Nmae : {this.props.cityInformation.display_name}</Card.Title>
+//                             {/* <Card.Img style={{ boxShadow: '2px 2px 2px #ccc' }} variant="top" src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_KEY}&center=${this.props.cityInformation.lat},${this.props.cityInformation.lon}&zoom=15`} alt={this.props.cityInformation.display_name} /> */}
+//                             <Card.Text>
+//                                 Latitude :  {this.props.cityInformation.lat}
+//                             </Card.Text>
+//                             <Card.Text>
+//                                 Latitude :  {this.props.cityInformation.lon}
+//                             </Card.Text>
+//                             <Card.Text>
+//                                 To see the map please click on Show Map
+//                             </Card.Text>
 
-super(props)
+//                             <Button variant="primary" onClick={this.props.showMapModal}>Show Map</Button>
+//                         </Card.Body>
+//                     </Card>
+//                 }
 
-
-
-}
-
-
-render(){
-
-return(
-
-<>
-{this.props.ShowTheMap &&
-       <Card style={{ width: '800px' }} onClick={this.props.changeState} className="cards">
-         
-                 
-                    <Card.Body style={{backgroundColor:'Lavender'}}>
-                    <Card.Img variant="top" src={this.props.image_url} style={{ width: '100px' },{ margin_left: '10px' }}/>
-                        <Card.Title> City: {this.props.City}</Card.Title>
-                        <Card.Text>
-                        <h5>    latitude :  {this.props.CityDirectionsLat}</h5>
-                        </Card.Text>
-                        <Card.Text>
-                        <h5> longitude : {this.props.CityDirectionsLon}</h5>
-                        </Card.Text>
-                        
-                        <Card.Img variant="top" src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_KEY}&center=${this.props.CityDirectionsLat},${this.props.CityDirectionsLon}&zoom=10`}></Card.Img>
-                        <Card.Text>
-                      <h5>  valid_date: {this.props.date}</h5>
-                        </Card.Text>
-                        <Card.Text>
-                     <h5>  Description: {this.props.Desc}</h5> 
-                        </Card.Text>
-                        <Card.Text>
-                        <h5>  valid_date: {this.props.date1}</h5>
-                        </Card.Text>
-                        <Card.Text>
-                        <h5>   Description: {this.props.Desc1}</h5>
-                        </Card.Text>
-                        <Card.Text>
-                        <h5>   valid_date: {this.props.date2}</h5>
-                         </Card.Text>
-                        <Card.Text>
-                        <h5>  Description:{this.props.Desc2}</h5>
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
-    }
-</>
-)
-}
-
- }
-
- export default Cards 
+//             </div>
+//         )
+//     }
+// }
+// export default Cards;
